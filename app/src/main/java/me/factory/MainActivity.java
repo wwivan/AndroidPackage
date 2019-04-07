@@ -10,15 +10,18 @@ import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.just.agentweb.AgentWeb;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
     private AgentWeb mAgentWeb;
-
-    public static final String defaultUrl = "http://192.168.3.83:8080/app/#/Device";
+    //开始盘点
+    //public static final String defaultUrl = "http://192.168.31.137:8080/app/#/Device";
+    //开始红外扫描
+    //public static final String defaultUrl = "http://192.168.31.137:8080/app/#/DeviceScanCode";
+    //开始摄像头扫描
+    public static final String defaultUrl = "http://192.168.31.137:8080/app/#/DeviceCamera";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,36 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject reponse = new JSONObject();
                 reponse.put("action", "inventoryStart");
                 reponse.put("result", result);
+                mAgentWeb.getJsAccessEntrace().quickCallJs("receiveMsgFromNative", reponse.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if (requestCode == 1001 && resultCode == 801) {
+            String rfidcode = data.getStringExtra("result");
+            try {
+                JSONObject reponse = new JSONObject();
+                reponse.put("action", "scanCodeStart");
+                reponse.put("result", rfidcode);
+                mAgentWeb.getJsAccessEntrace().quickCallJs("receiveMsgFromNative", reponse.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if (requestCode == 1001 && resultCode == 802) {
+            String rfidcode = data.getStringExtra("result");
+            try {
+                JSONObject reponse = new JSONObject();
+                reponse.put("action", "rfidwriteStart");
+                reponse.put("result", rfidcode);
+                mAgentWeb.getJsAccessEntrace().quickCallJs("receiveMsgFromNative", reponse.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if (requestCode == 1001 && resultCode == 803) {
+            String rfidcode = data.getStringExtra("result");
+            try {
+                JSONObject reponse = new JSONObject();
+                reponse.put("action", "cameraStart");
+                reponse.put("result", rfidcode);
                 mAgentWeb.getJsAccessEntrace().quickCallJs("receiveMsgFromNative", reponse.toString());
             } catch (JSONException e) {
                 e.printStackTrace();

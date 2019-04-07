@@ -16,10 +16,13 @@ public interface DeviceManager {
 
     void onDestory();
 
+    void rfidIDSet(String epcid);
+
     void setListener(Listener listener);
 
     interface Listener {
         void onScan(String epc, Set<String> epcs);
+        void onWrite(String epc);
     }
 
 }

@@ -9,6 +9,7 @@ import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.speedata.libuhf.IUHFService;
 import com.speedata.libuhf.UHFManager;
 import com.speedata.libuhf.bean.SpdInventoryData;
 import com.speedata.libuhf.interfaces.OnSpdInventoryListener;
+import com.speedata.libuhf.utils.StringUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,6 +38,7 @@ public class DeviceManagerImpl implements DeviceManager {
     private boolean inSearch = false;
 
     private Listener listener;
+    private long aLong;
 
     public DeviceManagerImpl(Activity activity) {
         this.activity = activity;
@@ -89,7 +92,6 @@ public class DeviceManagerImpl implements DeviceManager {
         });
 
         inSearch = true;
-        scant = 0;
         firm.clear();
         //取消掩码
         iuhfService.selectCard(1, "", false);
@@ -186,6 +188,82 @@ public class DeviceManagerImpl implements DeviceManager {
         activity.sendBroadcast(intent);
     }
 
+    @Override
+    public void rfidIDSet(String epcid) {
+        final String epc_str = epcid.replace(" ", "");
+        final byte[] write = StringUtils.stringToByte(epc_str);
+        final int epcl;
+        try {
+            epcl = Integer.parseInt("3", 10);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        final String rfidcode=epcid;
+        //isSuccess = false;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int writeArea = set_EPC(epcl, "00000000", write);
+                if (writeArea != 0) {
+                    handler.sendMessage(handler.obtainMessage(2, "参数不正确"));
+                }else{
+                    handler.obtainMessage(2,rfidcode);
+                }
+            }
+        }).start();
+    }
+
+    int set_EPC(int epclength, String passwd, byte[] EPC) {
+        soundPool.play(soundId, 1, 1, 0, 0, 1);
+        byte[] res;
+        if (epclength > 31) {
+            return -3;
+        }
+        if (epclength * 2 < EPC.length) {
+            return -3;
+        }
+        res = iuhfService.read_area(iuhfService.EPC_A, 1, 1, passwd);
+        if (res == null) {
+            return -5;
+        }
+        res[0] = (byte) ((res[0] & 0x7) | (epclength << 3));
+        byte[] f = new byte[2 + epclength * 2];
+        try {
+            System.arraycopy(res, 0, f, 0, 2);
+            System.arraycopy(EPC, 0, f, 2, epclength * 2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+        SystemClock.sleep(500);
+        return iuhfService.writeArea(iuhfService.EPC_A, 1, f.length / 2, passwd, f);
+    }
+
+
+    private void rfidIDRead(String tab) {;
+        if (inSearch) {
+            inSearch = false;
+            iuhfService.inventoryStop();
+            //btn_rfid.setText("开始读取");
+        } else {
+            inSearch = true;
+            scant = 0;
+            //取消掩码
+            iuhfService.selectCard(1, "", false);
+            //EventBus.getDefault().post(new MsgEvent("CancelSelectCard", ""));
+            iuhfService.inventoryStart();
+            //btn_rfid.setText("结束读取");
+        }
+    }
+
+    private void rfidIDReadClose() {
+        if (inSearch) {
+            inSearch = false;
+            iuhfService.inventoryStop();
+            //btn_rfid.setText("开始读取");
+        }
+    }
+
     //新的Listener回调参考代码
     private Handler handler = new Handler() {
         @Override
@@ -203,6 +281,12 @@ public class DeviceManagerImpl implements DeviceManager {
                         if(listener != null){
                             listener.onScan(var1.epc, firm);
                         }
+                    }
+                    break;
+                case 2:
+                    soundPool.play(soundId, 1, 1, 0, 0, 1);
+                    if(listener != null){
+                        listener.onWrite(msg.obj.toString());
                     }
                     break;
             }

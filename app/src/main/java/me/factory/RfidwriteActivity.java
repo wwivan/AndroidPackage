@@ -11,12 +11,13 @@ import android.widget.Button;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ScanActivity extends AppCompatActivity {
+public class RfidwriteActivity extends AppCompatActivity {
 
     private DeviceManager deviceManager;
 
     private Set<String> epsc = new HashSet<>();
 
+    private String rfidcode="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,12 +26,12 @@ public class ScanActivity extends AppCompatActivity {
         deviceManager.setListener(new DeviceManager.Listener() {
             @Override
             public void onScan(String epc, Set<String> epcs) {
-                ScanActivity.this.epsc.addAll(epcs);
+
             }
 
             @Override
             public void onWrite(String epc) {
-                //rfidcode=epc;
+                rfidcode=epc;
             }
         });
         deviceManager.init();
@@ -38,18 +39,17 @@ public class ScanActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                deviceManager.start();
+                deviceManager.rfidIDSet("765487654321");
             }
-        }, 1000L);
-
+        }, 200L);
         Button btnFinish = findViewById(R.id.btnFinish);
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent result = new Intent();
-                result.putExtra("result", epsc.toArray());
-                setResult(Activity.RESULT_OK, result);
-                ScanActivity.this.finish();
+                result.putExtra("result",rfidcode);
+                setResult(802, result);
+                RfidwriteActivity.this.finish();
             }
         });
     }

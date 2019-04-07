@@ -39,6 +39,15 @@ public class AndroidInterface {
                     if ("inventoryStart".equals(action)) {
                         Intent intent = new Intent(context, ScanActivity.class);
                         ((Activity) context).startActivityForResult(intent, 1001);
+                    }else if("scanCodeStart".equals(action)){
+                        Intent intent = new Intent(context, ScanCodeActivity.class);
+                        ((Activity) context).startActivityForResult(intent, 1001);
+                    }else if("rfidwriteStart".equals(action)){
+                        Intent intent = new Intent(context, RfidwriteActivity.class);
+                        ((Activity) context).startActivityForResult(intent, 1001);
+                    }else if("cameraStart".equals(action)){
+                        Intent intent = new Intent(context, QrcodeActivity.class);
+                        ((Activity) context).startActivityForResult(intent, 1001);
                     }
                 } catch (Exception e) {
                     Toast.makeText(context.getApplicationContext(), "请求参数错误", Toast.LENGTH_LONG).show();
