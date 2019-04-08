@@ -16,7 +16,9 @@ public interface DeviceManager {
 
     void onDestory();
 
-    void rfidIDSet(String epcid);
+    void rfidIDSet(String epcid);//写入rfid
+
+    void rfidRangeSet(int num); //功率10-30
 
     void setListener(Listener listener);
 

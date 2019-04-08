@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -189,6 +190,26 @@ public class DeviceManagerImpl implements DeviceManager {
     }
 
     @Override
+    public void rfidRangeSet(int num) {
+        //获取当前功率，只在当前activity有效，关闭则需要重新设置
+//        int ivp = iuhfService.getAntennaPower();
+//        Toast.makeText(activity, "当前功率："+ivp, Toast.LENGTH_SHORT).show();
+        if ((num < 10) || (num > 33)) {
+            //Toast.makeText(activity, "功率范围10 ~ 33", Toast.LENGTH_SHORT).show();
+            new toast_thread().setr("功率范围10 ~ 33").start();
+        } else {
+            int rv = iuhfService.setAntennaPower(num);
+            if (rv < 0) {
+                //Toast.makeText(activity, "功率设置失败!", Toast.LENGTH_SHORT).show();
+                new toast_thread().setr("功率设置失败!").start();
+            } else {
+                //Toast.makeText(activity, "功率设置成功!", Toast.LENGTH_SHORT).show();
+                new toast_thread().setr("功率设置成功!").start();
+            }
+        }
+    }
+
+    @Override
     public void rfidIDSet(String epcid) {
         final String epc_str = epcid.replace(" ", "");
         final byte[] write = StringUtils.stringToByte(epc_str);
@@ -198,7 +219,7 @@ public class DeviceManagerImpl implements DeviceManager {
         } catch (NumberFormatException e) {
             return;
         }
-        final String rfidcode=epcid;
+        final String rfidcode = epcid;
         //isSuccess = false;
         new Thread(new Runnable() {
             @Override
@@ -206,8 +227,8 @@ public class DeviceManagerImpl implements DeviceManager {
                 int writeArea = set_EPC(epcl, "00000000", write);
                 if (writeArea != 0) {
                     handler.sendMessage(handler.obtainMessage(2, "参数不正确"));
-                }else{
-                    handler.obtainMessage(2,rfidcode);
+                } else {
+                    handler.obtainMessage(2, rfidcode);
                 }
             }
         }).start();
@@ -240,7 +261,8 @@ public class DeviceManagerImpl implements DeviceManager {
     }
 
 
-    private void rfidIDRead(String tab) {;
+    private void rfidIDRead(String tab) {
+        ;
         if (inSearch) {
             inSearch = false;
             iuhfService.inventoryStop();
@@ -264,6 +286,23 @@ public class DeviceManagerImpl implements DeviceManager {
         }
     }
 
+    private class toast_thread extends Thread {
+
+        String a;
+
+        public toast_thread setr(String m) {
+            a = m;
+            return this;
+        }
+
+        public void run() {
+            super.run();
+            Looper.prepare();
+            Toast.makeText(activity, a, Toast.LENGTH_LONG).show();
+            Looper.loop();
+        }
+    }
+
     //新的Listener回调参考代码
     private Handler handler = new Handler() {
         @Override
@@ -278,14 +317,14 @@ public class DeviceManagerImpl implements DeviceManager {
                     SpdInventoryData var1 = (SpdInventoryData) msg.obj;
                     if (firm.add(var1.epc)) {
                         soundPool.play(soundId, 1, 1, 0, 0, 1);
-                        if(listener != null){
+                        if (listener != null) {
                             listener.onScan(var1.epc, firm);
                         }
                     }
                     break;
                 case 2:
                     soundPool.play(soundId, 1, 1, 0, 0, 1);
-                    if(listener != null){
+                    if (listener != null) {
                         listener.onWrite(msg.obj.toString());
                     }
                     break;

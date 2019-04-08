@@ -38,6 +38,8 @@ public class AndroidInterface {
                     // 开始盘点
                     if ("inventoryStart".equals(action)) {
                         Intent intent = new Intent(context, ScanActivity.class);
+                        int rfidrange = jsonObject.getInt("range");
+                        intent.putExtra("rfidrange",rfidrange);
                         ((Activity) context).startActivityForResult(intent, 1001);
                     }else if("scanCodeStart".equals(action)){
                         Intent intent = new Intent(context, ScanCodeActivity.class);

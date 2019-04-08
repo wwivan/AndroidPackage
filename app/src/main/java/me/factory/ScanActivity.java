@@ -38,6 +38,11 @@ public class ScanActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                //rfid工具类初始化后，进行设置rfid功率，此功率参数需要在vue页面做持久化保存，并在每次打开wms时，传递到以下方法做设置
+                // ，应为程序关闭后，功率设置就会无效，所以需要每次打开程序都传递下功率参数，以调节rfid距离
+                //启动和设置rfid, 需要有个1秒的时间间隔，否则会失败
+                int range = getIntent().getIntExtra("rfidrange", 30);//取不到值情况下，默认30
+                deviceManager.rfidRangeSet(range);
                 deviceManager.start();
             }
         }, 1000L);
@@ -53,6 +58,7 @@ public class ScanActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onResume() {
