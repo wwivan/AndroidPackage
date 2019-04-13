@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 在新更新需要的权限 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -25,6 +25,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.uid.system" />
 
     <application
         android:allowBackup="true"
@@ -44,14 +45,7 @@
         <activity android:name=".InputActivity"></activity>
         <activity android:name=".RfidwriteActivity"></activity>
         <activity android:name=".QrcodeActivity"></activity>
-        <activity
-            android:name="com.qrcodedemo.zxing.activity.CaptureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar" />
-        <activity
-            android:name="com.qrcodedemo.zxing.activity.ResultActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        <activity android:name="com.example.yzxing.CameraMainActivity"  android:supportsRtl="true"></activity>
     </application>
 
 </manifest>

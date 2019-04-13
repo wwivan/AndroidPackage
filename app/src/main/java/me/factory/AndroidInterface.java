@@ -9,6 +9,7 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
+import com.example.yzxing.CameraMainActivity;
 import com.just.agentweb.AgentWeb;
 
 import org.json.JSONObject;
@@ -48,7 +49,7 @@ public class AndroidInterface {
                         Intent intent = new Intent(context, RfidwriteActivity.class);
                         ((Activity) context).startActivityForResult(intent, 1001);
                     }else if("cameraStart".equals(action)){
-                        Intent intent = new Intent(context, QrcodeActivity.class);
+                        Intent intent = new Intent(context, CameraMainActivity.class);
                         ((Activity) context).startActivityForResult(intent, 1001);
                     }
                 } catch (Exception e) {

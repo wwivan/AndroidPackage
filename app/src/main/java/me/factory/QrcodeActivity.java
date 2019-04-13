@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.qrcodedemo.zxing.activity.CaptureActivity;
+import com.example.yzxing.CameraMainActivity;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +28,7 @@ public class QrcodeActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(QrcodeActivity.this, CaptureActivity.class),1);
+                startActivityForResult(new Intent(QrcodeActivity.this, CameraMainActivity.class),1);
             }
         });
     }
