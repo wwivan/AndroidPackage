@@ -25,7 +25,11 @@ public class ScanActivity extends AppCompatActivity {
         deviceManager.setListener(new DeviceManager.Listener() {
             @Override
             public void onScan(String epc, Set<String> epcs) {
-                ScanActivity.this.epsc.addAll(epcs);
+                //ScanActivity.this.epsc.addAll(epcs);
+                Intent result = new Intent();
+                result.putExtra("result", epcs.toArray());
+                setResult(Activity.RESULT_OK, result);
+                ScanActivity.this.finish();
             }
 
             @Override

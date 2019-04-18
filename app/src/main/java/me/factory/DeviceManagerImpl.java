@@ -201,10 +201,10 @@ public class DeviceManagerImpl implements DeviceManager {
             int rv = iuhfService.setAntennaPower(num);
             if (rv < 0) {
                 //Toast.makeText(activity, "功率设置失败!", Toast.LENGTH_SHORT).show();
-                new toast_thread().setr("功率设置失败!").start();
+                //new toast_thread().setr("功率设置失败!").start();
             } else {
                 //Toast.makeText(activity, "功率设置成功!", Toast.LENGTH_SHORT).show();
-                new toast_thread().setr("功率设置成功!").start();
+                //new toast_thread().setr("功率设置成功!").start();
             }
         }
     }
@@ -298,7 +298,7 @@ public class DeviceManagerImpl implements DeviceManager {
         public void run() {
             super.run();
             Looper.prepare();
-            Toast.makeText(activity, a, Toast.LENGTH_LONG).show();
+            //Toast.makeText(activity, a, Toast.LENGTH_LONG).show();
             Looper.loop();
         }
     }
@@ -321,6 +321,8 @@ public class DeviceManagerImpl implements DeviceManager {
                             listener.onScan(var1.epc, firm);
                         }
                     }
+                    iuhfService.inventoryStop();
+                    //Toast.makeText(activity, var1.epc, Toast.LENGTH_LONG).show();
                     break;
                 case 2:
                     soundPool.play(soundId, 1, 1, 0, 0, 1);
