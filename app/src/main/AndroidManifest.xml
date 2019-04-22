@@ -41,6 +41,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter></activity>
         <activity android:name=".ScanActivity" ></activity>
+        <activity android:name=".ScanMoreActivity" ></activity>
         <activity android:name=".ScanCodeActivity" ></activity>
         <activity android:name=".InputActivity"></activity>
         <activity android:name=".RfidwriteActivity"></activity>

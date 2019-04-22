@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AgentWeb mAgentWeb;
     //开始盘点
-    public static final String defaultUrl = "http://192.168.1.140:8081/app/#/Device";
+    public static final String defaultUrl = "http://192.168.1.140:8080/app/#/Device";
     //开始红外扫描
     //public static final String defaultUrl = "http://192.168.43.252:8080/app/#/DeviceScanCode";
     //开始摄像头扫描

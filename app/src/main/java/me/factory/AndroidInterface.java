@@ -40,9 +40,12 @@ public class AndroidInterface {
                     if ("inventoryStart".equals(action)) {
                         Intent intent = new Intent(context, ScanActivity.class);
                         int rfidrange = jsonObject.getInt("range");
-                        int scanFlag = jsonObject.getInt("scanFlag");
                         intent.putExtra("rfidrange",rfidrange);
-                        intent.putExtra("scanFlag",scanFlag);
+                        ((Activity) context).startActivityForResult(intent, 1001);
+                    }else if ("inventoryMore".equals(action)) {
+                        Intent intent = new Intent(context, ScanMoreActivity.class);
+                        int rfidrange = jsonObject.getInt("range");
+                        intent.putExtra("rfidrange",rfidrange);
                         ((Activity) context).startActivityForResult(intent, 1001);
                     }else if("scanCodeStart".equals(action)){
                         Intent intent = new Intent(context, ScanCodeActivity.class);

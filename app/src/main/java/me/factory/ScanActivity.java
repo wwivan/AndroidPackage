@@ -21,8 +21,7 @@ public class ScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        int scanFlag = getIntent().getIntExtra("scanFlag", 0); //默认单一扫描
-        deviceManager = new DeviceManagerImpl(this,scanFlag);
+        deviceManager = new DeviceManagerImpl(this,0);
         deviceManager.setListener(new DeviceManager.Listener() {
             @Override
             public void onScan(String epc, Set<String> epcs) {
@@ -51,17 +50,6 @@ public class ScanActivity extends AppCompatActivity {
                 deviceManager.start();
             }
         }, 1000L);
-
-        Button btnFinish = findViewById(R.id.btnFinish);
-        btnFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent result = new Intent();
-                result.putExtra("result", epsc.toArray());
-                setResult(Activity.RESULT_OK, result);
-                ScanActivity.this.finish();
-            }
-        });
     }
 
 

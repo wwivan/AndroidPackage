@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".ScanMoreActivity"
+    tools:layout_editor_absoluteY="25dp">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="top|center"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/listView_epclist"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"/>
+
+        <Button
+            android:id="@+id/btnFinish"
+            android:layout_width="100dp"
+            android:layout_height="41dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="168dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/an"
+            android:text="" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
