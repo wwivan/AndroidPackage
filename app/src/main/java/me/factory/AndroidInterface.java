@@ -31,7 +31,7 @@ public class AndroidInterface {
             @Override
             public void run() {
                 if (BuildConfig.DEBUG) {
-                    Toast.makeText(context.getApplicationContext(), "" + msg, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context.getApplicationContext(), "" + msg, Toast.LENGTH_LONG).show();
                 }
                 try {
                     JSONObject jsonObject = new JSONObject(msg);
