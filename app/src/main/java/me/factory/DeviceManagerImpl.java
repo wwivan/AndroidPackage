@@ -40,9 +40,11 @@ public class DeviceManagerImpl implements DeviceManager {
 
     private Listener listener;
     private long aLong;
+    private int scanFlag=0; //0 单一扫描 1 批量扫描
 
-    public DeviceManagerImpl(Activity activity) {
+    public DeviceManagerImpl(Activity activity,int flag) {
         this.activity = activity;
+        this.scanFlag= flag;
     }
 
     public void setListener(Listener listener) {
@@ -321,7 +323,7 @@ public class DeviceManagerImpl implements DeviceManager {
                             listener.onScan(var1.epc, firm);
                         }
                     }
-                    iuhfService.inventoryStop();
+                    if(scanFlag==0) iuhfService.inventoryStop();
                     //Toast.makeText(activity, var1.epc, Toast.LENGTH_LONG).show();
                     break;
                 case 2:

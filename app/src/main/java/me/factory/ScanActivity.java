@@ -21,7 +21,8 @@ public class ScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        deviceManager = new DeviceManagerImpl(this);
+        int scanFlag = getIntent().getIntExtra("scanFlag", 0); //默认单一扫描
+        deviceManager = new DeviceManagerImpl(this,scanFlag);
         deviceManager.setListener(new DeviceManager.Listener() {
             @Override
             public void onScan(String epc, Set<String> epcs) {

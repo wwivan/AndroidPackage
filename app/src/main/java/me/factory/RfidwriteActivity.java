@@ -22,7 +22,7 @@ public class RfidwriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        deviceManager = new DeviceManagerImpl(this);
+        deviceManager = new DeviceManagerImpl(this,0);
         deviceManager.setListener(new DeviceManager.Listener() {
             @Override
             public void onScan(String epc, Set<String> epcs) {
