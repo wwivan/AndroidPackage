@@ -97,18 +97,18 @@ public class ScanMoreActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //deviceManager.onResume();
+        deviceManager.onResume();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //deviceManager.onStop();
+        deviceManager.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //deviceManager.onDestory();
+        deviceManager.onDestory();
     }
 }
