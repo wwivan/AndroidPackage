@@ -27,10 +27,10 @@ public class ScanCodeActivity extends AppCompatActivity {
         //scar start
         btnSingleScan = (Button) findViewById(R.id.buttonscan);
         tv_scan = (TextView) findViewById(R.id.tv_scan);
-        Intent result = new Intent();
-        result.putExtra("result", "12344321");
-        setResult(801, result);
-        ScanCodeActivity.this.finish();
+//        Intent result = new Intent();
+//        result.putExtra("result", "12344321");
+//        setResult(801, result);
+//        ScanCodeActivity.this.finish();
         scanDecode = new ScanDecode(this);
         scanDecode.initService("true");//初始化扫描服务
         scanDecode.getBarCode(new ScanInterface.OnScanListener() {

@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String defaultUrl = "http://192.168.1.131:8080/app/#/Device";
     //开始盘点
     //public static final String defaultUrl = "http://192.168.43.252:8080/app/#/Device";
+    //public static final String defaultUrl = " http://192.168.1.118:8081/app/";
     //开始红外扫描
     //public static final String defaultUrl = "http://192.168.31.137:8080/app/#/DeviceScanCode";
     //开始摄像头扫描
@@ -91,7 +92,18 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else if (requestCode == 1001 && resultCode == 801) {
+        }else if (requestCode == 1002 && resultCode == RESULT_OK) {
+            Object[] ecps = (Object[]) data.getSerializableExtra("result");
+            String result = JSON.toJSONString(ecps);
+            try {
+                JSONObject reponse = new JSONObject();
+                reponse.put("action", "inventoryMore");
+                reponse.put("result", result);
+                mAgentWeb.getJsAccessEntrace().quickCallJs("receiveMsgFromNative", reponse.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == 1001 && resultCode == 801) {
             String rfidcode = data.getStringExtra("result");
             try {
                 JSONObject reponse = new JSONObject();
