@@ -1,6 +1,5 @@
 package me.factory;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,6 +68,6 @@ public class RfidwriteActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        deviceManager.onDestory();
+        deviceManager.onDestroy();
     }
 }

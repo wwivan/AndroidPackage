@@ -8,13 +8,11 @@ public interface DeviceManager {
 
     void start();
 
-    void stop();
-
     void onResume();
 
     void onStop();
 
-    void onDestory();
+    void onDestroy();
 
     void rfidIDSet(String epcid);//写入rfid
 
@@ -23,7 +21,7 @@ public interface DeviceManager {
     void setListener(Listener listener);
 
     interface Listener {
-        void onScan(String epc, Set<String> epcs);
+        void onScan(String tid, Set<String> tids);
         void onWrite(String epc);
     }
 

@@ -1,12 +1,8 @@
 package me.factory;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -53,6 +49,6 @@ public class ScanSetActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        deviceManager.onDestory();
+        deviceManager.onDestroy();
     }
 }

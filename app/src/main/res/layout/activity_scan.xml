@@ -8,12 +8,12 @@
     tools:context=".ScanActivity"
     tools:layout_editor_absoluteY="25dp">
 
-    <TextView
-        android:id="@+id/tv_scan"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:hint="红外扫描的值" />
+    <!--<TextView-->
+        <!--android:id="@+id/tv_scan"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:hint="红外扫描的值" />-->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

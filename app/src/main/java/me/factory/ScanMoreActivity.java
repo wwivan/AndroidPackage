@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
+import android.util.ArraySet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,15 +17,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import me.factory.bean.EPCBean;
-
 public class ScanMoreActivity extends AppCompatActivity {
 
     private DeviceManager deviceManager;
     private ListView EpcList;
-    private Set<String> epsc = new HashSet<>();
-    private ArrayAdapter<String> adapter;
-    private List<String> firm = new ArrayList<String>();
+    private Set<String> firm = new ArraySet<>();
     private Handler handler;
 
     @Override
@@ -33,11 +29,11 @@ public class ScanMoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_morescan);
         deviceManager = new DeviceManagerImpl(this,1);
+        firm.clear();
         deviceManager.setListener(new DeviceManager.Listener() {
             @Override
-            public void onScan(String epc, Set<String> epcs) {
-                ScanMoreActivity.this.epsc.addAll(epcs);
-                firm.add(epc);
+            public void onScan(String tid, Set<String> tids) {
+                firm.add(tid);
             }
 
             @Override
@@ -58,42 +54,18 @@ public class ScanMoreActivity extends AppCompatActivity {
 //                deviceManager.start();
 //            }
 //        }, 1000L);
-        EpcList = (ListView) findViewById(R.id.listView_epclist);
-        adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_list_item_1, firm);
-        EpcList.setAdapter(adapter);
+        EpcList = findViewById(R.id.listView_epclist);
         EpcList.setBackgroundResource(R.drawable.rfid_background);
         Button btnFinish = findViewById(R.id.btnFinish);
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent result = new Intent();
-                result.putExtra("result", epsc.toArray());
+                result.putExtra("result", firm.toArray());
                 setResult(Activity.RESULT_OK, result);
                 ScanMoreActivity.this.finish();
             }
         });
-    }
-
-    class EpcDataBase {
-        String epc;
-        int valid;
-
-        public EpcDataBase(String e, int v, String rssi, String tid_user) {
-            // TODO Auto-generated constructor stub
-            epc = e;
-            valid = v;
-        }
-
-
-
-        @Override
-        public String toString() {
-//                return "EPC:" + epc + "\n"
-//                        + "(" + "COUNT:" + valid + ")" + " RSSI:" + rssi + "\n";
-            return "RFID编号:" + epc + "\n" ;
-        }
-
     }
 
     @Override
@@ -112,7 +84,10 @@ public class ScanMoreActivity extends AppCompatActivity {
                 }
             }, 100L);
         }
-        return false;
+        if(event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+            onBackPressed();
+        }
+        return true;
     }
 
     @Override
@@ -130,6 +105,6 @@ public class ScanMoreActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        deviceManager.onDestory();
+        deviceManager.onDestroy();
     }
 }

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemProperties;
+//import android.os.SystemProperties;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
@@ -80,7 +80,7 @@ public class AndroidInterface {
                         intent.putExtra("rfidrange",rfidrange);
                         ((Activity) context).startActivityForResult(intent, 1002);
                     }else if("scanCodeStart".equals(action)){
-                        SystemProperties.set("persist.sys.scanstopimme", "false");
+//                        SystemProperties.set("persist.sys.scanstopimme", "false");
                         Intent intent = new Intent();
                         intent.setAction(START_SCAN_ACTION);
                         ((Activity) context).sendBroadcast(intent, null);

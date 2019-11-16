@@ -18,20 +18,17 @@ import com.speedata.libuhf.IUHFService;
 import com.speedata.libuhf.UHFManager;
 import com.speedata.libuhf.bean.SpdInventoryData;
 import com.speedata.libuhf.interfaces.OnSpdInventoryListener;
+import com.speedata.libuhf.utils.SharedXmlUtil;
 import com.speedata.libuhf.utils.StringUtils;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static android.content.Context.POWER_SERVICE;
-
 public class DeviceManagerImpl implements DeviceManager {
 
     private IUHFService iuhfService;
     private Activity activity;
-    private PowerManager pM = null;
     private PowerManager.WakeLock wK = null;
-    private int init_progress = 0;
     private SoundPool soundPool;
     private int soundId;
     private long scant = 0;
@@ -39,12 +36,14 @@ public class DeviceManagerImpl implements DeviceManager {
     private boolean inSearch = false;
 
     private Listener listener;
-    private long aLong;
-    private int scanFlag=0; //0 单一扫描 1 批量扫描
+    private int scanFlag = 0; //0 单一扫描 1 批量扫描
+    public final static String UHF_INV_CON = "uhf_inv_con";
 
-    public DeviceManagerImpl(Activity activity,int flag) {
+    private static final String TAG = "DeviceManagerImpl";
+
+    public DeviceManagerImpl(Activity activity, int flag) {
         this.activity = activity;
-        this.scanFlag= flag;
+        this.scanFlag = flag;
     }
 
     public void setListener(Listener listener) {
@@ -53,7 +52,6 @@ public class DeviceManagerImpl implements DeviceManager {
 
     @Override
     public void init() {
-        UHFManager.setStipulationLevel(20);
         try {
             iuhfService = UHFManager.getUHFService(activity);
         } catch (Exception e) {
@@ -66,30 +64,28 @@ public class DeviceManagerImpl implements DeviceManager {
             }
             return;
         }
-        newWakeLock();
-        sendUpddateService();
+        initSoundPool();
+
+    }
+
+    private void initSoundPool() {
         //盘点选卡
         soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
-        if (soundPool == null) {
-            Log.e("as3992", "Open sound failed");
-        }
         soundId = soundPool.load("/system/media/audio/ui/VideoRecord.ogg", 0);
         Log.w("as3992_6C", "id is " + soundId);
     }
 
     @Override
     public void start() {
-        int i = iuhfService.setQueryTagGroup(0, 0, 0);
+        int i = iuhfService.setInvMode(SharedXmlUtil.getInstance(activity).read(UHF_INV_CON, 1), 0, 6);
         if (i == 0) {
             //设置通话项成功
-        }
-        i = iuhfService.setDynamicAlgorithm();
-        if (i == 0) {
-            //设置成功
+            Log.d(TAG, String.format("设置通话项成功,i: %d", i));
         }
         iuhfService.setOnInventoryListener(new OnSpdInventoryListener() {
             @Override
             public void getInventoryData(SpdInventoryData var1) {
+                Log.d(TAG, "getInventoryData返回数据：[epc:" + var1.getEpc() + "rssi" + var1.getRssi() + "tid" + var1.getTid() + "]");
                 handler.sendMessage(handler.obtainMessage(1, var1));
             }
         });
@@ -102,18 +98,11 @@ public class DeviceManagerImpl implements DeviceManager {
     }
 
     @Override
-    public void stop() {
-        inSearch = false;
-        iuhfService.inventoryStop();
-    }
-
-    @Override
     public void onResume() {
         try {
             if (iuhfService != null) {
-                if (openDev()) {
-                    return;
-                }
+                boolean openResult = openDev();
+                Log.d(TAG, "onResume: openDev result: " + openResult);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,34 +128,13 @@ public class DeviceManagerImpl implements DeviceManager {
     }
 
     @Override
-    public void onDestory() {
-        if (wK != null) {
-            wK.release();
-        }
+    public void onDestroy() {
         UHFManager.closeUHFService();
         this.listener = null;
     }
 
-    private void newWakeLock() {
-        init_progress++;
-        pM = (PowerManager) activity.getSystemService(POWER_SERVICE);
-        if (pM != null) {
-            wK = pM.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK
-                    | PowerManager.ON_AFTER_RELEASE, "lock3992");
-            if (wK != null) {
-                wK.acquire();
-                init_progress++;
-            }
-        }
-        if (init_progress == 1) {
-            Log.w("3992_6C", "wake lock init failed");
-        }
-    }
-
     /**
      * 上电开串口
-     *
-     * @return
      */
     private boolean openDev() {
         if (iuhfService.openDev() != 0) {
@@ -317,13 +285,13 @@ public class DeviceManagerImpl implements DeviceManager {
                         soundPool.play(soundId, 1, 1, 0, 0, 1);
                     }
                     SpdInventoryData var1 = (SpdInventoryData) msg.obj;
-                    if (firm.add(var1.epc)) {
+                    if (firm.add(var1.tid)) {
                         soundPool.play(soundId, 1, 1, 0, 0, 1);
                         if (listener != null) {
-                            listener.onScan(var1.epc, firm);
+                            listener.onScan(var1.tid, firm);
                         }
                     }
-                    if(scanFlag==0) iuhfService.inventoryStop();
+                    if (scanFlag == 0) iuhfService.inventoryStop();
                     //Toast.makeText(activity, var1.epc, Toast.LENGTH_LONG).show();
                     break;
                 case 2:

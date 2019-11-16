@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemProperties;
+//import android.os.SystemProperties;
 import android.support.v7.app.AppCompatActivity;
+import android.util.ArraySet;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -43,7 +42,7 @@ public class ScanActivity extends AppCompatActivity implements OnClickListener,M
         deviceManager = new DeviceManagerImpl(this,0);
         deviceManager.setListener(new DeviceManager.Listener() {
             @Override
-            public void onScan(String epc, Set<String> epcs) {
+            public void onScan(String tid, Set<String> epcs) {
                 //ScanActivity.this.epsc.addAll(epcs);
                 Intent result = new Intent();
                 result.putExtra("result", epcs.toArray());
@@ -72,7 +71,7 @@ public class ScanActivity extends AppCompatActivity implements OnClickListener,M
     }
 
     private void startScan() {
-        SystemProperties.set("persist.sys.scanstopimme", "false");
+//        SystemProperties.set("persist.sys.scanstopimme", "false");
         Intent intent = new Intent();
         intent.setAction(START_SCAN_ACTION);
         sendBroadcast(intent, null);
@@ -102,7 +101,10 @@ public class ScanActivity extends AppCompatActivity implements OnClickListener,M
                 }
             }, 100L);
         }
-        return false;
+        if(event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+            onBackPressed();
+        }
+        return true;
     }
 
     @Override
@@ -129,8 +131,8 @@ public class ScanActivity extends AppCompatActivity implements OnClickListener,M
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        deviceManager.onDestory();
+        deviceManager.onDestroy();
         unregisterReceiver(receiver);
-        SystemProperties.set("persist.sys.scanstopimme", "true");
+//        SystemProperties.set("persist.sys.scanstopimme", "true");
     }
 }

@@ -1,13 +1,9 @@
 package me.factory;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -15,17 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scandecode.ScanDecode;
 import com.scandecode.inf.ScanInterface;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import com.scandecode.ScanDecode;
-import com.scandecode.inf.ScanInterface;
-import com.speedata.utils.MyDateAndTime;
 
 public class ScanCodeActivity extends AppCompatActivity implements MyReceiver.Message{
     //scan qrcode barcode
@@ -145,7 +133,7 @@ public class ScanCodeActivity extends AppCompatActivity implements MyReceiver.Me
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //  deviceManager.onDestory();
+        //  deviceManager.onDestroy();
         unregisterReceiver(receiver);
         SystemProperties.set("persist.sys.scanstopimme", "true");
     }

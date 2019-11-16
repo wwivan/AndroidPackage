@@ -11,7 +11,7 @@ android {
         multiDexEnabled true
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi' , 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -26,6 +26,12 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    //指定jdk版本
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -36,13 +42,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    compile project(':YZxing-lib')
-    compile 'com.android.support:multidex:1.0.1'
+    implementation project(':YZxing-lib')
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.just.agentweb:agentweb:4.0.2'
     implementation 'com.alibaba:fastjson:1.1.70.android'
-    //implementation files('libs/SystemProperties.jar')
+//    implementation files('libs/SystemProperties.jar')
     //7.6.9
-    api 'com.github.SpeedataG:UHF:7.7.7'
-    api 'com.github.SpeedataG:Device:1.6.4'
+    implementation 'com.github.SpeedataG:UHF:8.1.0'
+    implementation 'com.github.SpeedataG:Device:1.6.8'
 
 }
